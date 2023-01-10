@@ -1867,6 +1867,7 @@ namespace AvalonDock
 			// Determine the index of the document that will be removed.
 			//
 			int indexOfDocumentToRemove = GetIndexOfDocument(document);
+			bool isDocumentActive = document.IsActive;
 
 			if (!document.CloseDocument()) return;
 
@@ -1878,22 +1879,25 @@ namespace AvalonDock
 			//get rid of the closed document content
 			document.Content = null;
 
-			int indexOfDocumentToSelect = indexOfDocumentToRemove - 1;
-
-			if (indexOfDocumentToSelect < 0)
+			if(isDocumentActive)
 			{
-				indexOfDocumentToSelect = 0;
-			}
+				int indexOfDocumentToSelect = indexOfDocumentToRemove - 1;
 
-			//
-			// Determine the new active document and activate it.
-			// This doesn't only update the layout, but also all related (dependency) properties.
-			//
-			LayoutDocument layoutDocument = GetDocumentOnIndex(indexOfDocumentToSelect);
+				if (indexOfDocumentToSelect < 0)
+				{
+					indexOfDocumentToSelect = 0;
+				}
 
-			if (layoutDocument != null)
-			{
-				layoutDocument.IsActive = true;
+				//
+				// Determine the new active document and activate it.
+				// This doesn't only update the layout, but also all related (dependency) properties.
+				//
+				LayoutDocument layoutDocument = GetDocumentOnIndex(indexOfDocumentToSelect);
+
+				if (layoutDocument != null)
+				{
+					layoutDocument.IsActive = true;
+				}
 			}
 		}
 
